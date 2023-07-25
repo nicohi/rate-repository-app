@@ -35,12 +35,12 @@ const RepositoryItem = ({ repo } : ItemProps) => (
       </View>
         <View style={styles.hscontainer} >
             <View style={styles.vccontainer} >
-              <Text fontWeight='bold'> {knum(repo.forksCount)}</Text>
-              <Text>Forks</Text>
-            </View>
-            <View style={styles.vccontainer} >
               <Text fontWeight='bold'> {knum(repo.stargazersCount)}</Text>
               <Text>Stars</Text>
+            </View>
+            <View style={styles.vccontainer} >
+              <Text fontWeight='bold'> {knum(repo.forksCount)}</Text>
+              <Text>Forks</Text>
             </View>
             <View style={styles.vccontainer} >
               <Text fontWeight='bold'> {knum(repo.reviewCount)}</Text>
