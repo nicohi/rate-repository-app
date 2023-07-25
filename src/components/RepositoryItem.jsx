@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.backgroundLight,
   },
 });
 
