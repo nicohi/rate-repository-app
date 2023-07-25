@@ -1,4 +1,8 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+
+import Text from './Text';
+
+import theme from '../theme';
 
 type ItemProps = {
     id: string,
@@ -14,7 +18,7 @@ type ItemProps = {
 
 const RepositoryItem = ({ repo } : ItemProps) => (
   <View style={styles.item}>
-    <Text >Full name: {repo.fullname}</Text>
+    <Text fontWeight='bold' >Full name: {repo.fullName}</Text>
     <Text >Description: {repo.description}</Text>
     <Text >Language: {repo.language}</Text>
     <Text >Forks: {repo.forksCount}</Text>
@@ -26,13 +30,10 @@ const RepositoryItem = ({ repo } : ItemProps) => (
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#dddddd',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+    backgroundColor: theme.colors.background,
   },
 });
 
