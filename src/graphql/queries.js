@@ -6,6 +6,7 @@ query {
         edges {
         node {
             id
+            name
             fullName
             description
             language
@@ -14,6 +15,7 @@ query {
             ratingAverage
             reviewCount
             ownerAvatarUrl
+            ownerName
       }
     }
   }
@@ -24,6 +26,7 @@ export const GET_REPOSITORY = gql`
 query($repositoryId: ID!) {
   repository(id: $repositoryId) {
     id
+    name
     fullName
     description
     language
@@ -33,6 +36,7 @@ query($repositoryId: ID!) {
     reviewCount
     ownerAvatarUrl
     url
+    ownerName
     reviews {
       edges {
         node {

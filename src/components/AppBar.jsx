@@ -33,6 +33,7 @@ const AppBar = () => {
   return (<View style={styles.container}>
             <ScrollView horizontal={true}>
               <AppBarTab text='Repositories' to='/' />
+              <AppBarTab text='Create a review' to='/review' />
               {!loading && (data.me ?
                             <AppBarTab onPress={logout} text='Sign out' to='/signout' /> :
                             <AppBarTab text='Sign in' to='/signin' />)}

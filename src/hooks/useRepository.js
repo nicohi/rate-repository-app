@@ -8,6 +8,7 @@ const useRepositories = (id) => {
 
   const { error, loading, refetch } = useQuery(GET_REPOSITORY,
                                             {
+                                              fetchPolicy: 'cache-and-network',
                                               variables: { repositoryId: id },
                                               onCompleted: (data) => setRepository(data.repository),
                                               onError: (e) => console.log(e),
