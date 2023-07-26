@@ -1,8 +1,11 @@
-import { Image, View, StyleSheet } from 'react-native';
+import { Pressable, Image, View, StyleSheet } from 'react-native';
+import * as Linking from 'expo-linking';
+
+import { useParams } from 'react-router-native';
 
 import Text from './Text';
-
 import theme from '../theme';
+import useRepository from '../hooks/useRepository';
 
 type ItemProps = {
     id: string,
@@ -22,7 +25,7 @@ const knum = n => {
   return n;
 }
 
-const RepositoryItem = ({ repo } : ItemProps) => (
+const repoView = repo => (
   <View testID="repositoryItem" style={styles.item}>
     <View style={styles.vcontainer} >
       <View style={styles.hcontainer} >
@@ -51,9 +54,35 @@ const RepositoryItem = ({ repo } : ItemProps) => (
               <Text>Rating</Text>
             </View>
         </View>
+          {repo.url &&
+           <Pressable onPress={() => Linking.openURL(repo.url)}>
+            <View style={styles.vccontainer} >
+              <Text style={styles.language}>Open in GitHub</Text>
+            </View>
+            </Pressable>
+            }
     </View>
   </View>
 );
+
+const FetchRepositoryItem = ({ repoId }) => {
+  //console.log('FETCHING: ',repoId);
+  const { repository, loading } = useRepository(repoId);
+
+  if (loading || !repository) return null;
+
+  return repoView(repository);
+};
+
+const RepositoryItem = ({ repo } : ItemProps) => {
+  let { repoId } = useParams();
+
+  if (repoId) return <FetchRepositoryItem repoId={repoId} />;
+
+  return repoView(repo);
+};
+
+export default RepositoryItem;
 
 const styles = StyleSheet.create({
   item: {
@@ -97,5 +126,3 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 });
-
-export default RepositoryItem;
