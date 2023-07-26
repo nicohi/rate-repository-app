@@ -1,11 +1,8 @@
 import { Pressable, Image, View, StyleSheet } from 'react-native';
 import * as Linking from 'expo-linking';
 
-import { useParams } from 'react-router-native';
-
 import Text from './Text';
 import theme from '../theme';
-import useRepository from '../hooks/useRepository';
 
 type ItemProps = {
     id: string,
@@ -25,7 +22,8 @@ const knum = n => {
   return n;
 }
 
-const repoView = repo => (
+const RepositoryItem = ({ repo } : ItemProps) => {
+  return (
   <View testID="repositoryItem" style={styles.item}>
     <View style={styles.vcontainer} >
       <View style={styles.hcontainer} >
@@ -63,23 +61,7 @@ const repoView = repo => (
             }
     </View>
   </View>
-);
-
-const FetchRepositoryItem = ({ repoId }) => {
-  //console.log('FETCHING: ',repoId);
-  const { repository, loading } = useRepository(repoId);
-
-  if (loading || !repository) return null;
-
-  return repoView(repository);
-};
-
-const RepositoryItem = ({ repo } : ItemProps) => {
-  let { repoId } = useParams();
-
-  if (repoId) return <FetchRepositoryItem repoId={repoId} />;
-
-  return repoView(repo);
+  );
 };
 
 export default RepositoryItem;
