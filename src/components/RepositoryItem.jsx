@@ -23,7 +23,7 @@ const knum = n => {
 }
 
 const RepositoryItem = ({ repo } : ItemProps) => (
-  <View style={styles.item}>
+  <View testID="repositoryItem" style={styles.item}>
     <View style={styles.vcontainer} >
       <View style={styles.hcontainer} >
         <Image style={styles.tinyLogo} source={{uri: repo.ownerAvatarUrl,}} />
