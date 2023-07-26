@@ -10,7 +10,7 @@ const RepositoryInfo = ({ repository }) => {
   return <RepositoryItem repo={repository} />;
 };
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   return (
   <View testID="repositoryItem" style={styles.item}>
       <View style={styles.hcontainer} >
