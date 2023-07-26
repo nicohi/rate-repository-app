@@ -10,17 +10,17 @@ const useSignIn = () => {
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
-      console.log(error);
+      throw new Error('login error: ' + error);
     }
   })
 
   const signIn = async ({ username, password }) => {
-    await login({ variables: { username, password } });
-    await authStorage.setAccessToken(result.data.authenticate.accessToken);
+    const { data } = await login({ variables: { username, password } });
+    await authStorage.setAccessToken(data.authenticate.accessToken);
     apolloClient.resetStore();
     const accessToken = await authStorage.getAccessToken();
     console.log('Added access token to authStorage: ', accessToken);
-    return result;
+    return data;
   };
 
   return [signIn, result];

@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ( { text, to } ) => {
-  return (<Link to={to}>
+const AppBarTab = ( { onPress, text, to } ) => {
+
+  return (<Link onPress={onPress} to={to}>
               <View style={styles.item}>
                 <Text color='textSecondary' fontSize='heading' fontWeight='bold'>{text}</Text>
               </View>
