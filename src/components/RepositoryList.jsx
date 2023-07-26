@@ -1,12 +1,14 @@
 import { Pressable, FlatList, View, StyleSheet } from 'react-native';
 import { useNavigate } from "react-router-native";
 import {Picker} from '@react-native-picker/picker';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDebounce } from 'use-debounce';
 
 import useRepositories from '../hooks/useRepositories';
 import RepositoryItem from './RepositoryItem';
 
 import Text from './Text';
+import TextInput from './TextInput';
 
 const styles = StyleSheet.create({
   separator: {
@@ -15,8 +17,16 @@ const styles = StyleSheet.create({
 });
 
 const Header = ({ order, setOrder }) => {
-  //return <Text>AAA</Text>;
-  return <Pick order={order} setOrder={setOrder}/>
+  return (
+    <View style={{margin:10, backgroundColor: 'white'}}>
+      <TextInput
+        style={{margin:10}}
+        placeholder='search'
+        onChangeText={value => setOrder(order.map((v,i)=> i === 2 ? value : v))}>
+      </TextInput>
+      <Pick order={order} setOrder={setOrder}/>
+    </View>
+  );
 }
 
 const Pick = ({ order, setOrder }) => {
@@ -25,7 +35,7 @@ const Pick = ({ order, setOrder }) => {
     <Picker
       selectedValue={order[0]+'-'+order[1]}
       onValueChange={(itemValue, itemIndex) =>
-        setOrder(itemValue.split('-'))
+        setOrder(itemValue.split('-').concat([order[2]]))
       }>
       <Picker.Item label="Latest repositories" value="CREATED_AT-DESC" />
       <Picker.Item label="Highest rated repositories" value="RATING_AVERAGE-DESC" />
@@ -34,36 +44,56 @@ const Pick = ({ order, setOrder }) => {
   );
 }
 
-
-const ItemSeparator = () => <View style={styles.separator} />;
-
-export const RepositoryListContainer = ({ repositories, order, setOrder }) => {
+const Item = ({item}) => {
   const navigate = useNavigate();
-
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
-
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      keyExtractor={repo => repo.id}
-      ListHeaderComponent={() => <Header order={order} setOrder={setOrder}/>}
-      renderItem={({ item }) => <Pressable onPress={() => navigate(`/repo/${item.id}`)}>
-                                 <RepositoryItem repo={item} />
-                               </Pressable>}
-    />
+    <Pressable onPress={() => navigate(`/repo/${item.id}`)}>
+      <RepositoryItem repo={item} />
+    </Pressable>
   );
 };
 
+
+const ItemSeparator = () => <View style={styles.separator} />;
+
+export class RepositoryListContainer extends React.Component {
+//export const RepositoryListContainer = ({ repositories, order, setOrder }) => {
+  renderHeader = () => {
+    const props = this.props;
+
+    return (
+      <Header {...props} />
+    );
+  };
+
+  render() {
+    const { repositories } = this.props;
+
+
+    const repositoryNodes = repositories
+          ? repositories.edges.map((edge) => edge.node)
+          : [];
+
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        keyExtractor={repo => repo.id}
+        ListHeaderComponent={this.renderHeader}
+        renderItem={({ item }) => <Item item={item}/>}
+      />
+    );
+  }
+}
+
 const RepositoryList = () => {
-  const [order, setOrder] = useState(['CREATED_AT','DESC']);
+  const [orderb, setOrder] = useState(['CREATED_AT','DESC','']);
   const { repositories, refetch } = useRepositories();
+  const [order] = useDebounce(orderb, 500);
 
   useEffect(() => {
     console.log('refetching with: ', order);
-    refetch({ orderby: order[0], orderDirection: order[1] });
+    refetch({ orderby: order[0], orderDirection: order[1], searchKeyword: order[2] });
   }, [order]);
 
 
